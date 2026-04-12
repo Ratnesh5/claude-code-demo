@@ -112,3 +112,62 @@ input {
 .square.highlight {
   transform: scale(1.05);
 }
+.square.move::after {
+  content: "";
+  width: 15px;
+  height: 15px;
+  background: green;
+  border-radius: 50%;
+  display: block;
+  margin: auto;
+}
+.square {
+  position: relative;
+}
+
+.square.selected {
+  background-color: rgba(255, 255, 0, 0.5);
+}
+
+/* Green dot for empty move */
+.square.move::after {
+  content: "";
+  width: 18px;
+  height: 18px;
+  background: rgba(0, 0, 0, 0.5);
+  border-radius: 50%;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+/* Red circle for capture */
+.square.capture {
+  background-color: rgba(255, 0, 0, 0.4);
+}
+.cell {
+  position: relative;
+}
+
+.cell.selected {
+  background-color: rgba(255, 255, 0, 0.5);
+}
+
+/* move dot */
+.cell.move::after {
+  content: "";
+  width: 16px;
+  height: 16px;
+  background: rgba(0, 0, 0, 0.5);
+  border-radius: 50%;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+/* capture */
+.cell.capture {
+  background-color: rgba(255, 0, 0, 0.4);
+}

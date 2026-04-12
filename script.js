@@ -304,6 +304,61 @@ function goHome() {
   window.location.href = "index.html";
 }
 
+function getLegalMoves(sr, sc) {
+  const piece = game[sr][sc];
+  if (piece === "") return [];
+
+  const isWhitePiece = isWhite(piece);
+  let moves = [];
+
+  for (let dr = 0; dr < 8; dr++) {
+    for (let dc = 0; dc < 8; dc++) {
+      if (!isValidMove(sr, sc, dr, dc, piece)) continue;
+
+      const target = game[dr][dc];
+
+      // simulate move
+      game[dr][dc] = piece;
+      game[sr][sc] = "";
+
+      const stillInCheck = isKingInCheck(isWhitePiece);
+
+      // undo
+      game[sr][sc] = piece;
+      game[dr][dc] = target;
+
+      if (!stillInCheck) {
+        moves.push({ row: dr, col: dc });
+      }
+    }
+  }
+
+  return moves;
+}
+
+function showLegalMoves(row, col) {
+  clearHighlights();
+
+  const moves = getLegalMoves(row, col);
+
+  const selectedCell = document.querySelector(
+    `[data-row="${row}"][data-col="${col}"]`
+  );
+  selectedCell.classList.add("selected");
+
+  moves.forEach((move) => {
+    const sq = document.querySelector(
+      `[data-row="${move.row}"][data-col="${move.col}"]`
+    );
+
+    if (game[move.row][move.col] !== "") {
+      sq.classList.add("capture");
+    } else {
+      sq.classList.add("move");
+    }
+  });
+}
+
 function renderBoard() {
   board.innerHTML = "";
   turnText.innerText =
@@ -339,8 +394,9 @@ function renderBoard() {
             if (
               (turn === "white" && isWhite(piece)) ||
               (turn === "black" && !isWhite(piece))
-            )
+            ){
               selected = { row, col };
+              showLegalMoves(row,col);}
             else {
               console.log("Not your turn!!");
             }
@@ -351,6 +407,7 @@ function renderBoard() {
 
           if (sr === row && sc === col) {
             selected = null;
+            clearHighlights();
             return;
           }
           const target = game[row][col];
@@ -360,6 +417,18 @@ function renderBoard() {
               return;
             }
           }
+
+          const legalMoves = getLegalMoves(sr, sc);
+          const isAllowed = legalMoves.some(
+            (m) => m.row === row && m.col === col
+          );
+
+          if (!isAllowed) {
+            selected = null;
+            clearHighlights();
+            return;
+          }
+
           const movingpiece = game[sr][sc];
           const targetpiece = game[row][col];
           //pawn
@@ -428,6 +497,7 @@ function renderBoard() {
             showPopup("CHECK ⚠️");
           }
           turn = turn === "white" ? "black" : "white";
+          clearHighlights();
           renderBoard();
         }
       });
