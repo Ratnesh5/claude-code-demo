@@ -1,0 +1,46 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=, initial-scale=1.0">
+    <title>Chess</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+    .board {
+      display: grid;
+      grid-template-columns: repeat(8, 60px);
+      width: 480px;
+      margin: 50px auto;
+    }
+
+    .cell {
+      width: 60px;
+      height: 60px;
+
+      display: flex;              /* enables centering */
+      justify-content: center;    /* horizontal center */
+      align-items: center;        /* vertical center */
+
+      font-size: 40px;            /* increase piece size */
+      cursor: pointer;
+    }
+
+    .white { background: #eee; }
+    .black { background: #555; }
+  </style>
+</head>
+<body>
+    text-align: center;
+    font-family: Arial;
+    <h2 style="text-align:center; color:black;">♟️ Chess Game</h2>
+    <h3 id="turnText" style="text-align:center; margin-bottom:10px;"></h3>
+    <div class="board" id="board"></div>
+    <div id="popup" class="popup hidden">
+      <div class="popup-content">
+        <h2 id="popupText"></h2>
+        <button onclick="playAgain()">🔁 Play Again</button>
+        <button onclick="goHome()">🏠 Home</button>
+      </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
