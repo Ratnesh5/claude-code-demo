@@ -494,7 +494,7 @@ function renderBoard() {
             gameover = true;
             return;
           } else if (isKingInCheck(opponentIsWhite)) {
-            showPopup("CHECK ⚠️");
+            alert("CHECK ⚠️");
           }
           turn = turn === "white" ? "black" : "white";
           clearHighlights();
