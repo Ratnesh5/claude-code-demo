@@ -414,8 +414,9 @@ function renderBoard() {
           if (target !== "") {
             if (isWhite(target) === isWhite(game[sr][sc])) {
                 selected = { row, col };
-                showLegalMoves(row, col);
-
+                showLegalMoves(row, col);                  return;
+              }
+            }
           const legalMoves = getLegalMoves(sr, sc);
           const isAllowed = legalMoves.some(
             (m) => m.row === row && m.col === col
