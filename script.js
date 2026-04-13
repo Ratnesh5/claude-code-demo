@@ -71,8 +71,8 @@ function highlightMoves(row, col) {
 }
 
 function clearHighlights() {
-  document.querySelectorAll(".square").forEach((sq) => {
-    sq.classList.remove("highlight", "move", "capture");
+  document.querySelectorAll(".cell").forEach((sq) => {
+    sq.classList.remove("highlight", "move", "capture", "selected");
   });
 }
 
@@ -413,11 +413,10 @@ function renderBoard() {
           const target = game[row][col];
           if (target !== "") {
             if (isWhite(target) === isWhite(game[sr][sc])) {
-              selected = null;
-              return;
+                selected = { row, col };
+                showLegalMoves(row, col);                  return;
+              }
             }
-          }
-
           const legalMoves = getLegalMoves(sr, sc);
           const isAllowed = legalMoves.some(
             (m) => m.row === row && m.col === col
@@ -485,25 +484,50 @@ function renderBoard() {
           }
 
           selected = null;
-          const opponentIsWhite = !isWhite(movingpiece);
+            
+            if (movingpiece.toLowerCase() === 'p' && (row === 0 || row === 7)) {
+              window.pendingPromotion = { row, col, movingpiece };
+              document.getElementById("promotionPopup").classList.remove("hidden");
+              clearHighlights();
+              renderBoard();
+              return;
+            }
 
-          if (isCheckmate(opponentIsWhite)) {
-            renderBoard();
-            const winner = isWhite(movingpiece) ? player1 : player2;
-            showPopup("CHECKMATE 🔥\n" + winner + " wins!");
-            gameover = true;
-            return;
-          } else if (isKingInCheck(opponentIsWhite)) {
-            alert("CHECK ⚠️");
+            finalizeMove(movingpiece);
           }
-          turn = turn === "white" ? "black" : "white";
-          clearHighlights();
-          renderBoard();
-        }
-      });
+        });
 
-      board.appendChild(cell);
+        board.appendChild(cell);
+      }
     }
-  }
 }
+
+function finalizeMove(movingpiece) {
+  const opponentIsWhite = !isWhite(movingpiece);
+
+  if (isCheckmate(opponentIsWhite)) {
+    renderBoard();
+    const winner = isWhite(movingpiece) ? player1 : player2;
+    showPopup("CHECKMATE 🔥\n" + winner + " wins!");
+    gameover = true;
+    return;
+  } else if (isKingInCheck(opponentIsWhite)) {
+    alert("CHECK ⚠️");
+  }
+  turn = turn === "white" ? "black" : "white";
+  clearHighlights();
+  renderBoard();
+}
+
+function promotePiece(pieceType) {
+  const { row, col, movingpiece } = window.pendingPromotion;
+  const isWhitePiece = isWhite(movingpiece);
+  game[row][col] = isWhitePiece ? pieceType.toUpperCase() : pieceType.toLowerCase();
+  
+  document.getElementById("promotionPopup").classList.add("hidden");
+  window.pendingPromotion = null;
+  
+  finalizeMove(game[row][col]);
+}
+
 renderBoard();

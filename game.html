@@ -1,7 +1,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Chess</title>
     <link rel="stylesheet" href="style.css">
     <style>
@@ -37,6 +37,15 @@
         <h2 id="popupText"></h2>
         <button onclick="playAgain()">🔁 Play Again</button>
         <button onclick="goHome()">🏠 Home</button>
+      </div>
+    </div>
+    <div id="promotionPopup" class="popup hidden">
+      <div class="popup-content">
+        <h2>Promote Pawn to:</h2>
+        <button onclick="promotePiece('q')">♛ Queen</button>
+        <button onclick="promotePiece('r')">♜ Rook</button>
+        <button onclick="promotePiece('b')">♝ Bishop</button>
+        <button onclick="promotePiece('n')">♞ Knight</button>
       </div>
     </div>
     <script src="script.js"></script>

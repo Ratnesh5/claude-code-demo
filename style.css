@@ -148,6 +148,7 @@ input {
 }
 .cell {
   position: relative;
+  transition: all 0.2s ease;
 }
 
 .cell.selected {
